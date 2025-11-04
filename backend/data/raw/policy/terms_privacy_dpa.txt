@@ -1,0 +1,438 @@
+# Terms of Service
+
+**Last Updated: January 1, 2024**
+
+## 1. Acceptance of Terms
+
+By accessing or using Company's services ("Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Service.
+
+## 2. Description of Service
+
+Company provides a cloud-based collaboration and document management platform that allows users to create, store, share, and collaborate on documents and files.
+
+## 3. User Accounts
+
+### 3.1 Account Creation
+- You must provide accurate, current, and complete information during registration
+- You are responsible for maintaining the confidentiality of your account credentials
+- You are responsible for all activities that occur under your account
+- You must be at least 13 years old to create an account
+
+### 3.2 Account Security
+- You must notify us immediately of any unauthorized use of your account
+- We are not liable for any loss or damage arising from unauthorized account access
+- We reserve the right to suspend accounts showing suspicious activity
+
+### 3.3 Account Termination
+- You may terminate your account at any time through account settings
+- We may suspend or terminate accounts that violate these Terms
+- Upon termination, you have 30 days to export your data before permanent deletion
+
+## 4. Acceptable Use
+
+### 4.1 Permitted Uses
+You may use the Service for:
+- Creating and managing documents and files
+- Collaborating with other users
+- Storing and organizing content
+- Integration with approved third-party services
+
+### 4.2 Prohibited Uses
+You may NOT:
+- Upload malicious code, viruses, or malware
+- Use the Service for illegal activities
+- Infringe on intellectual property rights of others
+- Harass, abuse, or harm other users
+- Attempt to gain unauthorized access to the Service
+- Scrape or collect user data without permission
+- Use the Service to send spam or unsolicited messages
+- Resell or redistribute the Service without authorization
+
+### 4.3 Content Standards
+Content you upload must not:
+- Contain hate speech or promote violence
+- Include adult or explicit material
+- Violate privacy rights of others
+- Contain false or misleading information
+- Infringe copyrights, trademarks, or other IP rights
+
+## 5. Intellectual Property
+
+### 5.1 Your Content
+- You retain all rights to content you upload to the Service
+- By uploading content, you grant us a license to store, process, and display it as necessary to provide the Service
+- You represent that you have all necessary rights to the content you upload
+
+### 5.2 Our Intellectual Property
+- The Service, including its design, features, and functionality, is owned by Company
+- Our trademarks, logos, and brand elements may not be used without permission
+- We grant you a limited, non-exclusive license to use the Service
+
+### 5.3 DMCA Compliance
+If you believe content infringes your copyright, contact dmca@company.com with:
+- Description of the copyrighted work
+- Location of infringing material
+- Your contact information
+- Statement of good faith belief
+- Statement under penalty of perjury
+- Physical or electronic signature
+
+## 6. Payment Terms
+
+### 6.1 Subscription Fees
+- Fees are as stated in your selected plan
+- All fees are in U.S. Dollars unless otherwise specified
+- Fees are non-refundable except as required by law or our refund policy
+
+### 6.2 Billing
+- You will be billed in advance for each billing cycle
+- Payment is due immediately upon subscription or renewal
+- Failed payments may result in service suspension
+
+### 6.3 Changes to Fees
+- We may change subscription fees with 30 days notice
+- Price changes do not affect your current billing cycle
+- Continuing to use the Service after a price change constitutes acceptance
+
+## 7. Service Availability
+
+### 7.1 Uptime
+- We strive to maintain service availability as specified in your plan's SLA
+- Scheduled maintenance will be announced in advance when possible
+- We are not liable for downtime due to circumstances beyond our control
+
+### 7.2 Modifications
+- We may modify, suspend, or discontinue any part of the Service at any time
+- We will provide reasonable notice of significant changes when possible
+- We are not liable for any modification, suspension, or discontinuation
+
+## 8. Data and Privacy
+
+### 8.1 Data Storage
+- Your data is stored on secure servers in the United States
+- We implement industry-standard security measures
+- We perform regular backups, but you should maintain your own backups
+
+### 8.2 Privacy
+- Our Privacy Policy governs how we collect and use your information
+- By using the Service, you consent to our Privacy Policy
+- We do not sell your personal information to third parties
+
+### 8.3 Data Retention
+- Active account data is retained indefinitely
+- Deleted account data is retained for 30 days, then permanently deleted
+- We may retain some information as required by law
+
+## 9. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW:
+- THE SERVICE IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND
+- WE ARE NOT LIABLE FOR INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES
+- OUR TOTAL LIABILITY SHALL NOT EXCEED THE AMOUNT YOU PAID IN THE 12 MONTHS PRIOR TO THE CLAIM
+- SOME JURISDICTIONS DO NOT ALLOW LIABILITY LIMITATIONS, SO THESE MAY NOT APPLY TO YOU
+
+## 10. Indemnification
+
+You agree to indemnify and hold Company harmless from any claims, damages, or expenses arising from:
+- Your use of the Service
+- Your violation of these Terms
+- Your violation of any rights of another party
+- Content you upload to the Service
+
+## 11. Dispute Resolution
+
+### 11.1 Governing Law
+These Terms are governed by the laws of the State of Delaware, USA.
+
+### 11.2 Arbitration
+Disputes shall be resolved through binding arbitration rather than in court, except you may assert claims in small claims court.
+
+### 11.3 Class Action Waiver
+You agree to resolve disputes on an individual basis and waive the right to participate in class actions.
+
+## 12. General Provisions
+
+### 12.1 Entire Agreement
+These Terms constitute the entire agreement between you and Company regarding the Service.
+
+### 12.2 Severability
+If any provision is found unenforceable, the remaining provisions will remain in effect.
+
+### 12.3 No Waiver
+Our failure to enforce any right or provision is not a waiver of that right or provision.
+
+### 12.4 Assignment
+You may not assign these Terms without our consent. We may assign these Terms without restriction.
+
+### 12.5 Changes to Terms
+We may update these Terms at any time. Continued use after changes constitutes acceptance.
+
+## 13. Contact Information
+
+For questions about these Terms:
+- Email: legal@company.com
+- Mail: Company Legal Department, 123 Tech Street, San Francisco, CA 94105
+- Phone: 1-800-555-0123
+
+---
+
+# Privacy Policy
+
+**Last Updated: January 1, 2024**
+
+## 1. Introduction
+
+Company ("we," "our," or "us") respects your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Service.
+
+## 2. Information We Collect
+
+### 2.1 Information You Provide
+- Account information (name, email, password)
+- Profile information (photo, bio, preferences)
+- Payment information (processed by third-party payment processors)
+- Content you create or upload
+- Communications with our support team
+
+### 2.2 Automatically Collected Information
+- Log data (IP address, browser type, access times)
+- Device information (device type, operating system, unique identifiers)
+- Usage data (features used, actions taken, time spent)
+- Cookies and similar technologies
+- Location data (if you enable location services)
+
+### 2.3 Information from Third Parties
+- Authentication services (Google, Microsoft, etc.)
+- Payment processors
+- Analytics providers
+- Social media platforms (if you connect them)
+
+## 3. How We Use Your Information
+
+We use your information to:
+- Provide, maintain, and improve the Service
+- Process transactions and send related information
+- Send administrative and account-related messages
+- Respond to your comments and questions
+- Analyze usage patterns and trends
+- Detect, prevent, and address technical issues and fraud
+- Personalize your experience
+- Send marketing communications (with your consent)
+- Comply with legal obligations
+
+## 4. Information Sharing
+
+### 4.1 We Share Information With:
+- Service providers who assist our operations
+- Payment processors
+- Analytics providers
+- Cloud storage providers
+- Customer support tools
+
+### 4.2 We May Disclose Information:
+- To comply with legal obligations
+- To protect our rights and safety
+- In connection with a merger, acquisition, or sale of assets
+- With your consent or at your direction
+
+### 4.3 We Do Not:
+- Sell your personal information
+- Share your content with third parties for their marketing purposes
+- Use your content to train AI models (without explicit opt-in)
+
+## 5. Data Security
+
+We implement appropriate security measures including:
+- Encryption of data in transit (TLS/SSL)
+- Encryption of data at rest
+- Regular security audits
+- Access controls and authentication
+- Employee training on data protection
+- Incident response procedures
+
+However, no system is 100% secure. We cannot guarantee absolute security.
+
+## 6. Your Rights and Choices
+
+### 6.1 Access and Control
+You have the right to:
+- Access your personal information
+- Correct inaccurate information
+- Delete your information (subject to legal requirements)
+- Export your data
+- Object to certain processing
+- Withdraw consent
+
+### 6.2 Communication Preferences
+You can opt out of:
+- Marketing emails (via unsubscribe link)
+- Push notifications (in device settings)
+- Certain cookies (via browser settings)
+
+### 6.3 Do Not Track
+We do not currently respond to Do Not Track signals.
+
+## 7. Data Retention
+
+- Active account data: Retained while your account is active
+- Deleted account data: Retained for 30 days, then permanently deleted
+- Billing records: Retained for 7 years for tax purposes
+- Support communications: Retained for 3 years
+- Log data: Retained for 90 days
+
+## 8. International Data Transfers
+
+- Our servers are located in the United States
+- If you access the Service from outside the U.S., your information may be transferred to the U.S.
+- We comply with applicable data protection laws regarding international transfers
+
+## 9. Children's Privacy
+
+- The Service is not intended for children under 13
+- We do not knowingly collect information from children under 13
+- If we learn we have collected such information, we will delete it
+
+## 10. California Privacy Rights
+
+California residents have additional rights under CCPA:
+- Right to know what personal information we collect
+- Right to delete personal information
+- Right to opt out of sale (we don't sell information)
+- Right to non-discrimination
+
+Contact privacy@company.com to exercise these rights.
+
+## 11. European Privacy Rights
+
+EEA and UK residents have rights under GDPR:
+- Right of access
+- Right to rectification
+- Right to erasure
+- Right to restrict processing
+- Right to data portability
+- Right to object
+- Rights related to automated decision-making
+
+Contact privacy@company.com to exercise these rights.
+
+## 12. Cookies Policy
+
+### 12.1 Types of Cookies We Use:
+- Essential cookies (required for service functionality)
+- Analytics cookies (understand usage patterns)
+- Preference cookies (remember your settings)
+- Marketing cookies (if you consent)
+
+### 12.2 Managing Cookies
+You can control cookies through your browser settings. Disabling essential cookies may affect functionality.
+
+## 13. Changes to Privacy Policy
+
+We may update this Privacy Policy periodically. We will notify you of significant changes via email or prominent notice in the Service.
+
+## 14. Contact Us
+
+For privacy questions or to exercise your rights:
+- Email: privacy@company.com
+- Mail: Company Privacy Officer, 123 Tech Street, San Francisco, CA 94105
+- Privacy Portal: privacy.company.com
+
+---
+
+# Data Processing Agreement (DPA)
+
+**Effective Date: January 1, 2024**
+
+This Data Processing Agreement ("DPA") forms part of the Terms of Service between Company (the "Data Processor") and you (the "Data Controller").
+
+## 1. Definitions
+
+- **Personal Data**: Any information relating to an identified or identifiable natural person.
+- **Processing**: Any operation performed on Personal Data.
+- **Sub-processor**: Any third party engaged by Company to process Personal Data.
+
+## 2. Scope and Roles
+
+- You are the Data Controller determining the purposes and means of processing
+- Company is the Data Processor processing Personal Data on your behalf
+- This DPA applies to all Personal Data processed through the Service
+
+## 3. Data Processor Obligations
+
+Company shall:
+- Process Personal Data only on documented instructions from you
+- Ensure personnel are subject to confidentiality obligations
+- Implement appropriate technical and organizational security measures
+- Assist you in responding to data subject requests
+- Assist you in ensuring compliance with GDPR obligations
+- Delete or return Personal Data upon termination (unless legally required to retain)
+- Make available information necessary to demonstrate compliance
+
+## 4. Security Measures
+
+Company implements:
+- Encryption (AES-256 for data at rest, TLS 1.3 for data in transit)
+- Access controls and authentication
+- Regular security testing and audits
+- Incident response procedures
+- Employee background checks and training
+- Physical security for data centers
+
+## 5. Sub-processors
+
+### 5.1 Current Sub-processors:
+- Amazon Web Services (cloud infrastructure)
+- Stripe (payment processing)
+- SendGrid (email delivery)
+- Mixpanel (analytics)
+
+### 5.2 Changes to Sub-processors:
+- We will notify you of any intended changes to sub-processors
+- You have 30 days to object to a new sub-processor
+- If you object, you may terminate the Service
+
+## 6. Data Subject Rights
+
+Company will assist you in responding to data subject requests, including:
+- Access requests
+- Rectification requests
+- Erasure requests
+- Data portability requests
+- Objection to processing
+
+## 7. Data Breach Notification
+
+In the event of a data breach:
+- We will notify you without undue delay (within 72 hours)
+- Notification will include nature of breach, affected data, and mitigation steps
+- We will cooperate with you in breach response and notification to authorities
+
+## 8. Audits
+
+- You may audit our compliance with this DPA
+- Audits require 30 days advance notice
+- Audits must not interfere with business operations
+- Audits are limited to once per year unless a breach occurs
+
+## 9. International Transfers
+
+For data transfers outside the EEA:
+- We rely on Standard Contractual Clauses approved by the European Commission
+- We implement supplementary measures to ensure adequate protection
+- Documentation available upon request
+
+## 10. Term and Termination
+
+This DPA remains in effect while we process Personal Data on your behalf. Upon termination:
+- We will delete or return all Personal Data within 30 days
+- You may request specific deletion or return procedures
+- We may retain data as required by law
+
+## 11. Liability
+
+- Each party's liability under this DPA is subject to the limitations in the Terms of Service
+- Nothing in this DPA reduces either party's statutory liabilities under data protection law
+
+## 12. Contact for DPA Matters
+
+- Email: dpo@company.com
+- Mail: Data Protection Officer, Company, 123 Tech Street, San Francisco, CA 94105

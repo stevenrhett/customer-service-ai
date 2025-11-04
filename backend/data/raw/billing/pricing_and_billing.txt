@@ -1,0 +1,138 @@
+# Pricing and Billing Information
+
+## Service Plans
+
+### Basic Plan - $29/month
+- Up to 10 users
+- 5 GB storage per user
+- Email support
+- 99.9% uptime SLA
+- Monthly billing cycle
+- No setup fee
+
+### Professional Plan - $79/month
+- Up to 50 users
+- 25 GB storage per user
+- Priority email & chat support
+- 99.95% uptime SLA
+- Monthly or annual billing (10% discount for annual)
+- Free onboarding session
+- Advanced analytics dashboard
+
+### Enterprise Plan - Custom Pricing
+- Unlimited users
+- Unlimited storage
+- 24/7 phone, email & chat support
+- 99.99% uptime SLA
+- Flexible billing terms
+- Dedicated account manager
+- Custom integrations
+- Security compliance (SOC 2, HIPAA available)
+
+## Billing Cycles
+
+All plans are billed on a monthly basis by default. The billing date is set when you first subscribe and remains consistent each month. For example, if you subscribe on the 15th, you'll be billed on the 15th of each subsequent month.
+
+Annual billing is available for Professional and Enterprise plans with a 10% discount applied to the total annual cost.
+
+## Payment Methods
+
+We accept the following payment methods:
+- Credit cards (Visa, MasterCard, American Express, Discover)
+- Debit cards
+- PayPal
+- Wire transfer (Enterprise plan only, minimum annual contract)
+- ACH transfer (Enterprise plan only)
+
+## Refund Policy
+
+### 30-Day Money-Back Guarantee
+We offer a full refund within 30 days of your initial subscription to any plan. To request a refund, contact our billing support team at billing@company.com.
+
+### Pro-rated Refunds
+If you downgrade or cancel after 30 days, we do not offer pro-rated refunds for the current billing period. However, you will retain access to your plan features until the end of your current billing cycle.
+
+### Disputed Charges
+If you believe you've been charged incorrectly, please contact our billing team within 60 days of the charge. We'll investigate and issue a refund if an error occurred.
+
+## Invoicing
+
+### Invoice Delivery
+Invoices are automatically sent to the billing email address on file within 24 hours of each billing cycle. You can also download invoices at any time from your account dashboard under "Billing > Invoices."
+
+### Invoice Details
+Each invoice includes:
+- Invoice number (format: INV-YYYY-MM-XXXXX)
+- Billing period
+- Itemized charges
+- Total amount due
+- Payment method used
+- Transaction ID
+
+### Past Invoices
+You can access up to 24 months of past invoices in your account dashboard. For older invoices, contact billing@company.com.
+
+## Late Payments and Account Suspension
+
+### Grace Period
+If a payment fails, we'll retry the charge three times over a 7-day period. You'll receive email notifications for each failed attempt.
+
+### Account Suspension
+If payment is not received after 7 days, your account will be suspended. During suspension:
+- You cannot access your data
+- No new data can be added
+- Users cannot log in
+- You have 30 days to resolve payment issues
+
+### Account Termination
+If payment is not received within 30 days of suspension, your account and all associated data will be permanently deleted. We send reminder emails at days 14, 21, and 28 of the suspension period.
+
+## Upgrades and Downgrades
+
+### Upgrading Your Plan
+You can upgrade your plan at any time. Changes take effect immediately, and you'll be charged a pro-rated amount for the remainder of your billing cycle at the new plan rate.
+
+### Downgrading Your Plan
+Downgrades take effect at the start of your next billing cycle. You'll continue to have access to your current plan features until then.
+
+### User Seat Adjustments
+You can add or remove user seats at any time:
+- Additional seats are charged pro-rata for the current billing period
+- Removed seats result in a credit applied to your next invoice
+- Minimum seat requirements apply per plan tier
+
+## Tax Information
+
+### Sales Tax
+Sales tax is calculated based on your billing address and applicable local regulations. Tax rates are clearly shown on your invoice.
+
+### VAT (European Customers)
+EU customers are charged VAT based on their country of residence. If you provide a valid VAT ID, reverse charge may apply.
+
+### Tax Exemption
+If your organization is tax-exempt, please provide your tax exemption certificate to billing@company.com. We'll update your account within 3-5 business days.
+
+## Cancellation Policy
+
+### How to Cancel
+To cancel your subscription:
+1. Log into your account
+2. Navigate to Billing > Subscription
+3. Click "Cancel Subscription"
+4. Follow the confirmation prompts
+
+Alternatively, contact our support team at support@company.com.
+
+### When Cancellation Takes Effect
+Cancellations take effect at the end of your current billing cycle. You'll retain full access until that date.
+
+### Data Export
+Before cancellation, we recommend exporting your data. After cancellation, data is retained for 30 days, then permanently deleted.
+
+## Billing Support
+
+For billing questions or issues:
+- Email: billing@company.com
+- Live chat: Available during business hours (9 AM - 6 PM EST, Monday-Friday)
+- Phone: 1-800-555-0123 (Professional and Enterprise customers only)
+- Average response time: 4 hours for email, immediate for chat
