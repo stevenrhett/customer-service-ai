@@ -20,9 +20,16 @@ fi
 
 # Start with Docker Compose
 echo "🐳 Starting services with Docker Compose..."
-docker-compose up --build
+docker-compose up --build -d
 
-echo "✅ Services started!"
+echo "⏳ Waiting for services to be ready..."
+sleep 5
+
+echo "✅ Services are starting up!"
 echo "   Frontend: http://localhost:3000"
 echo "   Backend: http://localhost:8000"
 echo "   API Docs: http://localhost:8000/docs"
+echo ""
+echo "   Use 'docker-compose logs -f' to view logs"
+echo "   Use 'docker-compose down' to stop services"
+

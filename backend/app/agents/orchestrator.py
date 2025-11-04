@@ -1,5 +1,5 @@
 """Multi-agent orchestrator for routing queries to appropriate agents."""
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 from .base_agent import BaseAgent
 from .general_agent import GeneralInquiryAgent
 from .technical_agent import TechnicalSupportAgent
@@ -14,7 +14,7 @@ class AgentOrchestrator:
         self.agents = agents
         self.conversation_history: Dict[str, List[Dict[str, str]]] = {}
     
-    def route_query(self, query: str, conversation_id: str = None) -> tuple[str, str]:
+    def route_query(self, query: str, conversation_id: str = None) -> Tuple[str, str]:
         """
         Route a query to the most appropriate agent.
         Returns: (response, agent_name)

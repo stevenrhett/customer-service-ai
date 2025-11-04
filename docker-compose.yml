@@ -8,6 +8,9 @@ services:
     ports:
       - "8000:8000"
     environment:
+      # IMPORTANT: Set OPENAI_API_KEY in your environment before starting
+      # Example: export OPENAI_API_KEY=your_key_here
+      # Or create a .env file in the project root
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - CHROMA_DB_PATH=/app/data/chroma_db
       - ENVIRONMENT=production

@@ -52,21 +52,48 @@ async def upload_document(file: UploadFile = File(...)):
     if not vector_store:
         raise HTTPException(status_code=500, detail="Vector store not initialized")
     
+    # Maximum file size: 10MB
+    MAX_FILE_SIZE = 10 * 1024 * 1024
+    
     try:
-        # Read file content
-        content = await file.read()
+        # Validate filename exists
+        if not file.filename:
+            raise HTTPException(status_code=400, detail="Filename is required")
         
-        # Extract text based on file type
+        # Read file content with size limit
+        content = b""
+        total_size = 0
+        chunk_size = 1024 * 1024  # 1MB chunks
+        
+        while chunk := await file.read(chunk_size):
+            total_size += len(chunk)
+            if total_size > MAX_FILE_SIZE:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"File too large. Maximum size is {MAX_FILE_SIZE / (1024*1024)}MB"
+                )
+            content += chunk
+        
+        # Extract text based on file type (case-insensitive)
         text = ""
-        if file.filename.endswith('.pdf'):
+        filename_lower = file.filename.lower()
+        
+        if filename_lower.endswith('.pdf'):
             pdf_reader = PdfReader(io.BytesIO(content))
             text = "\n".join(page.extract_text() for page in pdf_reader.pages)
-        elif file.filename.endswith('.txt'):
+        elif filename_lower.endswith('.txt'):
             text = content.decode('utf-8')
         else:
             raise HTTPException(
                 status_code=400, 
                 detail="Unsupported file type. Only PDF and TXT files are supported."
+            )
+        
+        # Validate text was extracted
+        if not text.strip():
+            raise HTTPException(
+                status_code=400,
+                detail="No text could be extracted from the file"
             )
         
         # Generate document ID
@@ -85,6 +112,8 @@ async def upload_document(file: UploadFile = File(...)):
             document_id=doc_id
         )
     
+    except HTTPException:
+        raise
     except Exception as e:
         return DocumentUploadResponse(
             success=False,
