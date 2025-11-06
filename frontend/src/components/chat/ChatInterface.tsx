@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChatMessage } from "@/components/chat/ChatMessage"
+import { getApiUrl } from "@/lib/api-config"
 import { Send, Loader2 } from "lucide-react"
 
 interface Message {
@@ -49,13 +50,14 @@ export function ChatInterface() {
 
     try {
       // Call the backend API
-      const response = await fetch("http://localhost:8000/api/chat", {
+      const response = await fetch(getApiUrl("/api/chat"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           message: userMessage,
+          session_id: messages.find(m => m.role === "user") ? undefined : undefined, // Will be handled by backend
           conversation_history: messages,
         }),
       })
@@ -81,7 +83,7 @@ export function ChatInterface() {
         ...prev,
         {
           role: "assistant",
-          content: "I apologize, but I'm having trouble connecting to the server. Please make sure the backend is running on http://localhost:8000",
+          content: `I apologize, but I'm having trouble connecting to the server. Please make sure the backend is running on ${getApiUrl("")}`,
           agentUsed: "error",
         },
       ])
