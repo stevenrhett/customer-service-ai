@@ -219,3 +219,4 @@ __marimo__/
 node_modules/
 .next/
 .env.local
+backend/load_env.sh
