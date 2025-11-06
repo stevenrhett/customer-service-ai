@@ -45,7 +45,7 @@ class DataIngester:
         )
         
         # Document paths
-        self.base_path = Path(__file__).parent.parent / "data" / "mock_documents"
+        self.base_path = Path(__file__).parent.parent / "data" / "raw"
         
     def load_documents_from_directory(self, directory: Path, doc_type: str) -> List[Document]:
         """
