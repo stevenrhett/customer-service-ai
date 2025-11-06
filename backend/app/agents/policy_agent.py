@@ -53,7 +53,7 @@ class PolicyAgent:
             # Default path
             docs_path = os.path.join(
                 os.path.dirname(__file__), 
-                "../../data/mock_documents/policy"
+                "../../data/raw/policy"
             )
         
         policy_docs = []
@@ -124,9 +124,57 @@ class PolicyAgent:
         messages.append(HumanMessage(content=query))
         
         # Generate response
-        response = self.llm.invoke(messages)
+        response = await self.llm.ainvoke(messages)
         
         return response.content
+    
+    async def stream_query(
+        self, 
+        query: str, 
+        session_id: str, 
+        history: List[BaseMessage] = None
+    ):
+        """
+        Stream response for policy query token-by-token.
+        
+        Args:
+            query: User's policy question
+            session_id: Session identifier
+            history: Conversation history
+            
+        Yields:
+            Chunks of the response as they're generated
+        """
+        # Build system prompt with pre-loaded policy context
+        system_prompt = """You are a policy and compliance support agent.
+        Use the following policy documents to answer the customer's question.
+        
+        Guidelines:
+        - Provide accurate information based on the policies
+        - Quote specific sections when relevant
+        - Be clear and professional
+        - If information isn't in the policies, say so clearly
+        - For legal questions, remind users to consult legal counsel for specific advice
+        
+        Policy Documents:
+        {context}
+        """
+        
+        # Build message list
+        messages = [
+            SystemMessage(content=system_prompt.format(context=self.policy_context))
+        ]
+        
+        # Include recent conversation history
+        if history:
+            messages.extend(history[-3:])
+        
+        messages.append(HumanMessage(content=query))
+        
+        # Stream response token-by-token
+        async for chunk in self.llm.astream(messages):
+            if chunk.content:
+                yield chunk.content
     
     def reload_policy_documents(self, docs_path: str = None):
         """

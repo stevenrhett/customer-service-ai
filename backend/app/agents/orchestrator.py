@@ -10,6 +10,11 @@ from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
 from langchain_openai import ChatOpenAI
 from langchain_aws import ChatBedrock
 from app.config import get_settings
+from app.agents.billing_agent import BillingAgent
+from app.agents.technical_agent import TechnicalAgent
+from app.agents.policy_agent import PolicyAgent
+from app.services.vector_store import vector_store_service
+from app.utils.exceptions import AgentError, VectorStoreError
 
 settings = get_settings()
 
@@ -29,13 +34,21 @@ class OrchestratorAgent:
     """
     
     def __init__(self):
-        """Initialize the orchestrator with routing LLM."""
+        """Initialize the orchestrator with routing LLM and specialized agents."""
         # Use AWS Bedrock Claude Haiku for fast routing
         self.routing_llm = ChatBedrock(
             model_id="anthropic.claude-3-haiku-20240307-v1:0",
             region_name=settings.aws_region,
             credentials_profile_name=None,  # Uses environment variables
         )
+        
+        # Initialize specialized agents with vector stores
+        billing_store = vector_store_service.get_billing_store()
+        technical_store = vector_store_service.get_technical_store()
+        
+        self.billing_agent = BillingAgent(vector_store=billing_store)
+        self.technical_agent = TechnicalAgent(vector_store=technical_store)
+        self.policy_agent = PolicyAgent()
         
         self.graph = self._build_graph()
     
@@ -71,7 +84,7 @@ class OrchestratorAgent:
         
         return workflow.compile()
     
-    def _route_query(self, state: AgentState) -> AgentState:
+    async def _route_query(self, state: AgentState) -> AgentState:
         """
         Analyze the query and determine which specialized agent should handle it.
         """
@@ -89,7 +102,7 @@ class OrchestratorAgent:
         
         Respond with ONLY one word: billing, technical, or policy"""
         
-        response = self.routing_llm.invoke([HumanMessage(content=routing_prompt)])
+        response = await self.routing_llm.ainvoke([HumanMessage(content=routing_prompt)])
         next_agent = response.content.strip().lower()
         
         # Validate response
@@ -105,22 +118,73 @@ class OrchestratorAgent:
         """Determine which node to visit next based on routing decision."""
         return state.get("next_agent", "end")
     
-    def _handle_billing(self, state: AgentState) -> AgentState:
-        """Handle billing queries (placeholder for BillingAgent integration)."""
-        state["current_agent"] = "billing"
-        # TODO: Integrate with BillingAgent
+    async def _handle_billing(self, state: AgentState) -> AgentState:
+        """Handle billing queries using BillingAgent."""
+        try:
+            query = state["messages"][-1].content
+            session_id = state["session_id"]
+            history = state["messages"][:-1]  # All messages except the last one
+            
+            # Process query with billing agent (await async call)
+            response_content = await self.billing_agent.process_query(
+                query, session_id, history
+            )
+            
+            # Add response to messages
+            state["messages"].append(AIMessage(content=response_content))
+            state["current_agent"] = "billing"
+        except Exception as e:
+            # Fallback response on error
+            error_msg = f"I apologize, but I encountered an error processing your billing question. Please try rephrasing your question."
+            state["messages"].append(AIMessage(content=error_msg))
+            state["current_agent"] = "billing"
         return state
     
-    def _handle_technical(self, state: AgentState) -> AgentState:
-        """Handle technical queries (placeholder for TechnicalAgent integration)."""
-        state["current_agent"] = "technical"
-        # TODO: Integrate with TechnicalAgent
+    async def _handle_technical(self, state: AgentState) -> AgentState:
+        """Handle technical queries using TechnicalAgent."""
+        try:
+            if self.technical_agent.retriever is None:
+                raise VectorStoreError("Technical vector store not available")
+            
+            query = state["messages"][-1].content
+            session_id = state["session_id"]
+            history = state["messages"][:-1]  # All messages except the last one
+            
+            # Process query with technical agent (await async call)
+            response_content = await self.technical_agent.process_query(
+                query, session_id, history
+            )
+            
+            # Add response to messages
+            state["messages"].append(AIMessage(content=response_content))
+            state["current_agent"] = "technical"
+        except Exception as e:
+            # Fallback response on error
+            error_msg = f"I apologize, but I encountered an error processing your technical question. Please try rephrasing your question."
+            state["messages"].append(AIMessage(content=error_msg))
+            state["current_agent"] = "technical"
         return state
     
-    def _handle_policy(self, state: AgentState) -> AgentState:
-        """Handle policy queries (placeholder for PolicyAgent integration)."""
-        state["current_agent"] = "policy"
-        # TODO: Integrate with PolicyAgent
+    async def _handle_policy(self, state: AgentState) -> AgentState:
+        """Handle policy queries using PolicyAgent."""
+        try:
+            query = state["messages"][-1].content
+            session_id = state["session_id"]
+            history = state["messages"][:-1]  # All messages except the last one
+            
+            # Process query with policy agent (await async call)
+            response_content = await self.policy_agent.process_query(
+                query, session_id, history
+            )
+            
+            # Add response to messages
+            state["messages"].append(AIMessage(content=response_content))
+            state["current_agent"] = "policy"
+        except Exception as e:
+            # Fallback response on error
+            error_msg = f"I apologize, but I encountered an error processing your policy question. Please try rephrasing your question."
+            state["messages"].append(AIMessage(content=error_msg))
+            state["current_agent"] = "policy"
         return state
     
     async def process_query(self, message: str, session_id: str, history: List[BaseMessage] = None) -> dict:
@@ -146,11 +210,88 @@ class OrchestratorAgent:
             session_id=session_id
         )
         
-        # Run the graph
-        result = self.graph.invoke(initial_state)
+        # Run the graph (use ainvoke for async support)
+        result = await self.graph.ainvoke(initial_state)
+        
+        # Extract the response from the last message
+        response_content = ""
+        if result.get("messages"):
+            last_message = result["messages"][-1]
+            if isinstance(last_message, AIMessage):
+                response_content = last_message.content
         
         return {
             "agent_used": result.get("current_agent", "unknown"),
             "session_id": session_id,
+            "response": response_content,
             "state": result
+        }
+    
+    async def stream_query(self, message: str, session_id: str, history: List[BaseMessage] = None):
+        """
+        Stream a user query through the orchestration system.
+        
+        Args:
+            message: The user's message
+            session_id: Session identifier
+            history: Previous conversation messages
+            
+        Yields:
+            Dict with agent_used and response chunks
+        """
+        # First, route to determine which agent to use
+        initial_messages = history or []
+        initial_messages.append(HumanMessage(content=message))
+        
+        routing_state = AgentState(
+            messages=initial_messages,
+            next_agent="",
+            current_agent="orchestrator",
+            session_id=session_id
+        )
+        
+        # Route to determine agent
+        routing_result = await self._route_query(routing_state)
+        agent_name = routing_result.get("next_agent", "technical")
+        
+        # Stream from the appropriate agent
+        query = message
+        agent_history = history or []
+        
+        try:
+            if agent_name == "billing":
+                async for chunk in self.billing_agent.stream_query(query, session_id, agent_history):
+                    yield {
+                        "agent_used": "billing",
+                        "content": chunk,
+                        "is_final": False
+                    }
+            elif agent_name == "technical":
+                async for chunk in self.technical_agent.stream_query(query, session_id, agent_history):
+                    yield {
+                        "agent_used": "technical",
+                        "content": chunk,
+                        "is_final": False
+                    }
+            elif agent_name == "policy":
+                async for chunk in self.policy_agent.stream_query(query, session_id, agent_history):
+                    yield {
+                        "agent_used": "policy",
+                        "content": chunk,
+                        "is_final": False
+                    }
+        except Exception as e:
+            # Fallback error message
+            error_msg = f"I apologize, but I encountered an error. Please try again."
+            yield {
+                "agent_used": agent_name,
+                "content": error_msg,
+                "is_final": False
+            }
+        
+        # Send final chunk
+        yield {
+            "agent_used": agent_name,
+            "content": "",
+            "is_final": True
         }
