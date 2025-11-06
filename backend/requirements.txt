@@ -23,3 +23,7 @@ boto3>=1.34.72
 # Utilities
 python-dotenv==1.0.0
 python-multipart==0.0.6
+
+# Security & Rate Limiting
+slowapi==0.1.9
+html-sanitizer==2.2.0
