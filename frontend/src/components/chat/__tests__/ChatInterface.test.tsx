@@ -53,7 +53,7 @@ describe('ChatInterface', () => {
     render(<ChatInterface />)
     
     const input = screen.getByPlaceholderText(/type your message/i)
-    const submitButton = screen.getByRole('button', { name: /send/i })
+    const submitButton = screen.getByRole('button', { name: /send message/i })
     
     await user.type(input, 'Test message')
     await user.click(submitButton)
@@ -79,7 +79,7 @@ describe('ChatInterface', () => {
     render(<ChatInterface />)
     
     const input = screen.getByPlaceholderText(/type your message/i)
-    const submitButton = screen.getByRole('button', { name: /send/i })
+    const submitButton = screen.getByRole('button', { name: /send message/i })
     
     await user.type(input, 'Test message')
     await user.click(submitButton)
@@ -97,7 +97,7 @@ describe('ChatInterface', () => {
     render(<ChatInterface />)
     
     const input = screen.getByPlaceholderText(/type your message/i)
-    const submitButton = screen.getByRole('button', { name: /send/i })
+    const submitButton = screen.getByRole('button', { name: /send message/i })
     
     await user.type(input, 'Test message')
     await user.click(submitButton)
@@ -112,7 +112,7 @@ describe('ChatInterface', () => {
     const user = userEvent.setup()
     render(<ChatInterface />)
     
-    const submitButton = screen.getByRole('button', { name: /send/i })
+    const submitButton = screen.getByRole('button', { name: /send message/i })
     await user.click(submitButton)
 
     expect(global.fetch).not.toHaveBeenCalled()

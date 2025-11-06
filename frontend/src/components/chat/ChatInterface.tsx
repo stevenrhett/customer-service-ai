@@ -143,6 +143,7 @@ export function ChatInterface() {
               size="icon"
               disabled={!input.trim() || isLoading}
               className="h-[60px] w-[60px]"
+              aria-label="Send message"
             >
               {isLoading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
