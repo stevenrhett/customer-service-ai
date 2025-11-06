@@ -1,7 +1,18 @@
 """
 Pytest configuration and fixtures for testing.
 """
+import os
 import pytest
+
+# Set test environment variables BEFORE any imports that use settings
+# This must happen before importing modules that call get_settings()
+os.environ.setdefault("OPENAI_API_KEY", "sk-test123456789012345678901234567890")
+os.environ.setdefault("AWS_ACCESS_KEY_ID", "AKIATEST123456789012345")
+os.environ.setdefault("AWS_SECRET_ACCESS_KEY", "test_secret_key_123456789012345678901234567890")
+os.environ.setdefault("AWS_REGION", "us-west-2")
+os.environ.setdefault("ENVIRONMENT", "test")
+os.environ.setdefault("LOG_LEVEL", "DEBUG")
+
 from unittest.mock import AsyncMock, MagicMock, patch
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.documents import Document

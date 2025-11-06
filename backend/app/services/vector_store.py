@@ -28,11 +28,18 @@ class VectorStoreService:
     
     def __init__(self):
         """Initialize the vector store service."""
+        # Lazy load embeddings - only create when needed
+        # This prevents import errors during testing
+        pass
+    
+    def _get_embeddings(self):
+        """Get or create embeddings instance."""
         if self._embeddings is None:
             self._embeddings = HuggingFaceEmbeddings(
                 model_name="sentence-transformers/all-MiniLM-L6-v2",
                 model_kwargs={'device': 'cpu'}
             )
+        return self._embeddings
     
     def get_billing_store(self) -> Optional[Chroma]:
         """
@@ -46,7 +53,7 @@ class VectorStoreService:
                 self._billing_store = Chroma(
                     persist_directory=settings.chroma_persist_directory,
                     collection_name="billing",
-                    embedding_function=self._embeddings
+                    embedding_function=self._get_embeddings()
                 )
             except Exception as e:
                 print(f"Warning: Could not load billing vector store: {e}")
@@ -65,7 +72,7 @@ class VectorStoreService:
                 self._technical_store = Chroma(
                     persist_directory=settings.chroma_persist_directory,
                     collection_name="technical",
-                    embedding_function=self._embeddings
+                    embedding_function=self._get_embeddings()
                 )
             except Exception as e:
                 print(f"Warning: Could not load technical vector store: {e}")
@@ -76,6 +83,7 @@ class VectorStoreService:
         """Reset all vector stores (useful for testing)."""
         self._billing_store = None
         self._technical_store = None
+        self._embeddings = None
 
 
 # Global instance
