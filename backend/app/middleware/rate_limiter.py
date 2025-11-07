@@ -44,9 +44,12 @@ except ImportError:
             self.detail = detail
             super().__init__(detail)
 
-def get_rate_limiter() -> Limiter:
+def get_rate_limiter():
     """Get the rate limiter instance."""
     return limiter
+
+# Export RateLimitExceeded so it can be imported from this module
+__all__ = ['limiter', 'rate_limit_handler', 'RateLimitExceeded', 'get_rate_limiter']
 
 def rate_limit_handler(request: Request, exc: RateLimitExceeded):
     """Handle rate limit exceeded errors."""
