@@ -126,6 +126,7 @@ async def test_agents_with_history(mock_openai_chat, sample_messages):
         await agent.process_query("Follow-up question", "test-session", sample_messages)
         
         # Verify history was included in LLM call
+        assert mock_openai_chat.ainvoke.called
         call_args = mock_openai_chat.ainvoke.call_args
         if call_args:
             messages = call_args[0][0]

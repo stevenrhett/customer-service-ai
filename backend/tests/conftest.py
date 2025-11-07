@@ -95,11 +95,8 @@ def mock_openai_chat():
         
         mock_instance.astream = mock_astream
         
-        # Mock ainvoke (async invoke)
-        async def mock_ainvoke(messages):
-            return AIMessage(content="Mock async response")
-        
-        mock_instance.ainvoke = mock_ainvoke
+        # Mock ainvoke (async invoke) - use AsyncMock to track calls
+        mock_instance.ainvoke = AsyncMock(return_value=AIMessage(content="Mock async response"))
         
         mock_chat.return_value = mock_instance
         yield mock_instance

@@ -150,5 +150,11 @@ async def test_orchestrator_with_history(mock_openai_chat, mock_bedrock_chat, mo
             
             # Verify history was passed to agent
             call_args = orchestrator.billing_agent.process_query.call_args
-            assert call_args[0][2] == sample_messages  # history parameter
+            history_passed = call_args[0][2]  # history parameter
+            
+            # Compare content, not object identity (orchestrator creates a slice)
+            assert len(history_passed) == len(sample_messages)
+            for passed_msg, expected_msg in zip(history_passed, sample_messages):
+                assert passed_msg.content == expected_msg.content
+                assert type(passed_msg) == type(expected_msg)
 
