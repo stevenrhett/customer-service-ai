@@ -268,7 +268,7 @@ curl -X POST http://localhost:8000/api/chat/stream \
   "response": "AI response",
   "agent_used": "billing|technical|policy",
   "session_id": "session-id",
-  "timestamp": "2024-11-06T12:00:00"
+  "timestamp": "2025-11-06T12:00:00"
 }
 ```
 
