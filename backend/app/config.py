@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     # AWS Bedrock Configuration
     aws_access_key_id: str
     aws_secret_access_key: str
+    aws_session_token: Optional[str] = None  # Required for temporary SSO credentials
     aws_region: str = "us-west-2"
     
     # Application Configuration

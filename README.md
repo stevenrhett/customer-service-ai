@@ -152,6 +152,7 @@ python scripts/ingest_data.py
 cd backend
 source venv/bin/activate
 python -m app.main
+# OR: uvicorn app.main:app --reload --port 8000
 
 # Terminal 2 - Frontend
 cd frontend
