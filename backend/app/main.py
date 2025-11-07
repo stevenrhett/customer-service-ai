@@ -9,8 +9,7 @@ from fastapi.exceptions import RequestValidationError
 from app.config import get_settings
 from app.api import chat
 from app.utils.exceptions import CustomerServiceException
-from app.middleware.rate_limiter import limiter, rate_limit_handler
-from slowapi.errors import RateLimitExceeded
+from app.middleware.rate_limiter import limiter, rate_limit_handler, RateLimitExceeded
 import logging
 
 # Initialize settings
