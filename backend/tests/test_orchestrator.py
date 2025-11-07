@@ -15,7 +15,7 @@ async def test_orchestrator_routes_to_billing_agent(mock_openai_chat, mock_bedro
         mock_service.get_technical_store.return_value = mock_vector_store
         
         # Mock routing LLM to return "billing"
-        with patch('langchain_aws.ChatBedrock') as mock_bedrock:
+        with patch('app.agents.orchestrator.ChatBedrock') as mock_bedrock:
             mock_instance = MagicMock()
             mock_instance.ainvoke = AsyncMock(return_value=AIMessage(content="billing"))
             mock_bedrock.return_value = mock_instance
@@ -43,7 +43,7 @@ async def test_orchestrator_routes_to_technical_agent(mock_openai_chat, mock_bed
         mock_service.get_technical_store.return_value = mock_vector_store
         
         # Mock routing LLM to return "technical"
-        with patch('langchain_aws.ChatBedrock') as mock_bedrock:
+        with patch('app.agents.orchestrator.ChatBedrock') as mock_bedrock:
             mock_instance = MagicMock()
             mock_instance.ainvoke = AsyncMock(return_value=AIMessage(content="technical"))
             mock_bedrock.return_value = mock_instance
@@ -71,7 +71,7 @@ async def test_orchestrator_routes_to_policy_agent(mock_openai_chat, mock_bedroc
         mock_service.get_technical_store.return_value = mock_vector_store
         
         # Mock routing LLM to return "policy"
-        with patch('langchain_aws.ChatBedrock') as mock_bedrock:
+        with patch('app.agents.orchestrator.ChatBedrock') as mock_bedrock:
             mock_instance = MagicMock()
             mock_instance.ainvoke = AsyncMock(return_value=AIMessage(content="policy"))
             mock_bedrock.return_value = mock_instance
@@ -99,7 +99,7 @@ async def test_orchestrator_streaming(mock_openai_chat, mock_bedrock_chat, mock_
         mock_service.get_technical_store.return_value = mock_vector_store
         
         # Mock routing LLM to return "billing"
-        with patch('langchain_aws.ChatBedrock') as mock_bedrock:
+        with patch('app.agents.orchestrator.ChatBedrock') as mock_bedrock:
             mock_instance = MagicMock()
             mock_instance.ainvoke = AsyncMock(return_value=AIMessage(content="billing"))
             mock_bedrock.return_value = mock_instance

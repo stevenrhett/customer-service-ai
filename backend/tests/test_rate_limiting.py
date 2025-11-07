@@ -39,16 +39,25 @@ async def test_rate_limit_exceeded_response(mock_env_vars):
     """Test rate limit exceeded response format."""
     # This test would require actual rate limiting to be triggered
     # For now, we test the endpoint exists and rate limiting middleware is configured
-    async with AsyncClient(app=app, base_url="http://test") as client:
-        response = await client.post(
-            "/api/chat",
-            json={"message": "Test message"}
-        )
-        # Should either succeed or return 429 with proper error format
-        assert response.status_code in [200, 429]
-        if response.status_code == 429:
-            data = response.json()
-            assert "error" in data or "message" in data
+    with patch('app.api.chat.get_orchestrator') as mock_get_orch:
+        mock_orchestrator = AsyncMock()
+        mock_orchestrator.process_query = AsyncMock(return_value={
+            "response": "Test response",
+            "agent_used": "billing",
+            "session_id": "test-session"
+        })
+        mock_get_orch.return_value = mock_orchestrator
+        
+        async with AsyncClient(app=app, base_url="http://test") as client:
+            response = await client.post(
+                "/api/chat",
+                json={"message": "Test message"}
+            )
+            # Should either succeed or return 429 with proper error format
+            assert response.status_code in [200, 429]
+            if response.status_code == 429:
+                data = response.json()
+                assert "error" in data or "message" in data
 
 
 @pytest.mark.asyncio
