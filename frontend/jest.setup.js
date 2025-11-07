@@ -23,7 +23,8 @@ jest.mock('next/navigation', () => ({
 }))
 
 // Mock environment variables
-process.env.NEXT_PUBLIC_API_URL = 'http://localhost:8000'
+process.env.NEXT_PUBLIC_API_BASE_URL = 'http://localhost:8000'
+process.env.NEXT_PUBLIC_API_URL = 'http://localhost:8000' // Legacy support
 
 // Global test utilities
 global.fetch = jest.fn()

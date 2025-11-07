@@ -2,7 +2,6 @@
 Credential Test Script
 Run this to verify your OpenAI and AWS credentials are working correctly.
 """
-import os
 import sys
 from pathlib import Path
 
@@ -11,27 +10,27 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from app.config import get_settings
 
+
 def test_openai():
     """Test OpenAI API connection"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Testing OpenAI Connection")
-    print("="*60)
-    
+    print("=" * 60)
+
     try:
         from langchain_openai import ChatOpenAI
+
         settings = get_settings()
-        
+
         llm = ChatOpenAI(
-            model="gpt-3.5-turbo",
-            temperature=0,
-            openai_api_key=settings.openai_api_key
+            model="gpt-3.5-turbo", temperature=0, openai_api_key=settings.openai_api_key
         )
-        
+
         response = llm.invoke("Say 'OpenAI connection successful!'")
-        print(f"✓ OpenAI API Key: Valid")
+        print("✓ OpenAI API Key: Valid")
         print(f"✓ Response: {response.content}")
         return True
-        
+
     except Exception as e:
         print(f"✗ OpenAI Error: {e}")
         return False
@@ -39,73 +38,73 @@ def test_openai():
 
 def test_aws_bedrock():
     """Test AWS Bedrock connection"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Testing AWS Bedrock Connection")
-    print("="*60)
-    
+    print("=" * 60)
+
     try:
         import boto3
+
         settings = get_settings()
-        
+
         # Test basic AWS connection
-        client = boto3.client(
-            'bedrock',
-            region_name=settings.aws_region
-        )
-        
+        client = boto3.client("bedrock", region_name=settings.aws_region)
+
         print(f"✓ AWS Region: {settings.aws_region}")
-        print(f"✓ AWS Credentials: Loaded")
-        
+        print("✓ AWS Credentials: Loaded")
+
         # Try to list models
         try:
             response = client.list_foundation_models()
             claude_models = [
-                m['modelId'] for m in response['modelSummaries'] 
-                if 'claude' in m['modelId'].lower()
+                m["modelId"]
+                for m in response["modelSummaries"]
+                if "claude" in m["modelId"].lower()
             ]
-            
-            print(f"✓ Bedrock Access: Granted")
-            print(f"✓ Available Claude Models:")
+
+            print("✓ Bedrock Access: Granted")
+            print("✓ Available Claude Models:")
             for model in claude_models[:3]:  # Show first 3
                 print(f"  - {model}")
-            
+
             return True
-            
+
         except Exception as e:
             if "AccessDeniedException" in str(e):
-                print(f"⚠ Bedrock Access: Credentials work, but Bedrock not enabled")
-                print(f"  Contact your instructor to enable Bedrock access")
+                print("⚠ Bedrock Access: Credentials work, but Bedrock not enabled")
+                print("  Contact your instructor to enable Bedrock access")
             else:
                 print(f"⚠ Bedrock Error: {e}")
             return False
-            
+
     except Exception as e:
         print(f"✗ AWS Error: {e}")
-        print(f"\nTroubleshooting:")
-        print(f"1. Make sure AWS credentials are in .env file")
-        print(f"2. Check AWS_CREDENTIALS_GUIDE.md for setup instructions")
-        print(f"3. Verify credentials haven't expired (if using temporary)")
+        print("\nTroubleshooting:")
+        print("1. Make sure AWS credentials are in .env file")
+        print("2. Check AWS_CREDENTIALS_GUIDE.md for setup instructions")
+        print("3. Verify credentials haven't expired (if using temporary)")
         return False
 
 
 def test_chroma_setup():
     """Test ChromaDB setup"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Testing ChromaDB Setup")
-    print("="*60)
-    
+    print("=" * 60)
+
     try:
         settings = get_settings()
         db_path = Path(settings.chroma_persist_directory)
-        
+
         if db_path.exists():
             print(f"✓ ChromaDB Directory: {db_path}")
-            
+
             # Check for collections
             import chromadb
+
             client = chromadb.PersistentClient(path=str(db_path))
             collections = client.list_collections()
-            
+
             if collections:
                 print(f"✓ Collections Found: {len(collections)}")
                 for col in collections:
@@ -113,14 +112,14 @@ def test_chroma_setup():
                     print(f"  - {col.name}: {count} documents")
                 return True
             else:
-                print(f"⚠ No collections found")
-                print(f"  Run: python scripts/ingest_data.py")
+                print("⚠ No collections found")
+                print("  Run: python scripts/ingest_data.py")
                 return False
         else:
-            print(f"⚠ ChromaDB not initialized")
-            print(f"  Run: python scripts/ingest_data.py")
+            print("⚠ ChromaDB not initialized")
+            print("  Run: python scripts/ingest_data.py")
             return False
-            
+
     except Exception as e:
         print(f"✗ ChromaDB Error: {e}")
         return False
@@ -128,26 +127,26 @@ def test_chroma_setup():
 
 def main():
     """Run all tests"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("CUSTOMER SERVICE AI - CREDENTIAL TEST")
-    print("="*60)
-    
+    print("=" * 60)
+
     results = {
         "OpenAI": test_openai(),
         "AWS Bedrock": test_aws_bedrock(),
-        "ChromaDB": test_chroma_setup()
+        "ChromaDB": test_chroma_setup(),
     }
-    
-    print("\n" + "="*60)
+
+    print("\n" + "=" * 60)
     print("TEST SUMMARY")
-    print("="*60)
-    
+    print("=" * 60)
+
     for service, passed in results.items():
         status = "✓ PASS" if passed else "✗ FAIL"
         print(f"{service:.<30} {status}")
-    
+
     all_passed = all(results.values())
-    
+
     if all_passed:
         print("\n🎉 All tests passed! You're ready to run the application.")
         print("\nNext steps:")
@@ -163,7 +162,7 @@ def main():
             print("- Follow AWS_CREDENTIALS_GUIDE.md to get AWS credentials")
         if not results["ChromaDB"]:
             print("- Run: python scripts/ingest_data.py")
-    
+
     return 0 if all_passed else 1
 
 

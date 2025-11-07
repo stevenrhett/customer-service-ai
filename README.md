@@ -152,6 +152,7 @@ python scripts/ingest_data.py
 cd backend
 source venv/bin/activate
 python -m app.main
+# OR: uvicorn app.main:app --reload --port 8000
 
 # Terminal 2 - Frontend
 cd frontend
@@ -267,7 +268,7 @@ curl -X POST http://localhost:8000/api/chat/stream \
   "response": "AI response",
   "agent_used": "billing|technical|policy",
   "session_id": "session-id",
-  "timestamp": "2024-11-06T12:00:00"
+  "timestamp": "2025-11-06T12:00:00"
 }
 ```
 
