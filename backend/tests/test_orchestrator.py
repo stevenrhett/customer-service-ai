@@ -134,7 +134,7 @@ async def test_orchestrator_with_history(mock_openai_chat, mock_bedrock_chat, mo
         mock_service.get_billing_store.return_value = mock_vector_store
         mock_service.get_technical_store.return_value = mock_vector_store
         
-        with patch('langchain_aws.ChatBedrock') as mock_bedrock:
+        with patch('app.agents.orchestrator.ChatBedrock') as mock_bedrock:
             mock_instance = MagicMock()
             mock_instance.ainvoke = AsyncMock(return_value=AIMessage(content="billing"))
             mock_bedrock.return_value = mock_instance
