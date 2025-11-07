@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChatMessage } from "@/components/chat/ChatMessage"
-import { getApiUrl } from "@/lib/api-config"
+import { getApiUrl, API_CONFIG } from "@/lib/api-config"
 import { Send, Loader2 } from "lucide-react"
 
 interface Message {
@@ -50,7 +50,7 @@ export function ChatInterface() {
 
     try {
       // Call the backend API
-      const response = await fetch(getApiUrl("/api/chat"), {
+      const response = await fetch(getApiUrl(API_CONFIG.endpoints.chat), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
