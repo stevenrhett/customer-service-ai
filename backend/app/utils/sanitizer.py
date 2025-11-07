@@ -2,17 +2,23 @@
 Input sanitization utilities for security.
 """
 import re
-from html_sanitizer import Sanitizer
 from typing import Optional
 
-# Configure HTML sanitizer (strict mode for user input)
-sanitizer = Sanitizer({
-    "tags": set(),  # Remove all HTML tags
-    "attributes": {},
-    "empty": True,
-    "separate": True,
-    "strip_whitespace": True,
-})
+# Try to import html_sanitizer, fallback to basic sanitization if not available
+try:
+    from html_sanitizer import Sanitizer
+    HAS_SANITIZER = True
+    # Configure HTML sanitizer (strict mode for user input)
+    sanitizer = Sanitizer({
+        "tags": set(),  # Remove all HTML tags
+        "attributes": {},
+        "empty": True,
+        "separate": True,
+        "strip_whitespace": True,
+    })
+except ImportError:
+    HAS_SANITIZER = False
+    sanitizer = None
 
 # Maximum lengths
 MAX_MESSAGE_LENGTH = 10000  # 10KB
@@ -35,7 +41,11 @@ def sanitize_text(text: str, max_length: Optional[int] = None) -> str:
         return ""
     
     # Remove HTML tags and scripts
-    sanitized = sanitizer.sanitize(text)
+    if HAS_SANITIZER and sanitizer:
+        sanitized = sanitizer.sanitize(text)
+    else:
+        # Fallback: basic HTML tag removal using regex
+        sanitized = re.sub(r'<[^>]+>', '', text)
     
     # Remove control characters except newlines and tabs
     sanitized = re.sub(r'[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f-\x9f]', '', sanitized)

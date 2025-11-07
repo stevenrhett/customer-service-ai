@@ -40,3 +40,10 @@ class LLMError(CustomerServiceException):
         super().__init__(message, status_code=500, details=details)
         self.provider = provider
 
+
+class ConfigurationError(CustomerServiceException):
+    """Exception raised when configuration is invalid or missing."""
+    def __init__(self, message: str, config_key: Optional[str] = None, details: Optional[dict] = None):
+        super().__init__(message, status_code=500, details=details)
+        self.config_key = config_key
+
