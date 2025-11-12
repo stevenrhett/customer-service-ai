@@ -6,13 +6,14 @@ Implements Pure RAG:
 - No caching (information changes frequently)
 - Searches technical docs, bug reports, forum posts
 """
-from typing import AsyncGenerator, List
+from typing import AsyncGenerator, List, Union
 
 from app.agents.technical_agent import TechnicalAgent
 from app.config import get_settings
 from app.services.cache_service import cache_service
 from app.utils.exceptions import LLMError, VectorStoreError
 from app.utils.logging import get_logger
+from langchain_aws import ChatBedrock
 from langchain_community.vectorstores import Chroma
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
@@ -30,7 +31,7 @@ class TechnicalService:
     def __init__(
         self,
         vector_store: Chroma = None,
-        llm: ChatOpenAI = None,
+        llm: Union[ChatOpenAI, ChatBedrock] = None,
         agent: TechnicalAgent = None,
     ):
         """
@@ -38,15 +39,41 @@ class TechnicalService:
 
         Args:
             vector_store: ChromaDB vector store with technical documents
-            llm: OpenAI LLM instance
+            llm: LLM instance (OpenAI or Bedrock)
             agent: Technical agent adapter (for prompt templates)
         """
         self.vector_store = vector_store
-        self.llm = llm or ChatOpenAI(
-            model=settings.openai_model,
-            temperature=0,
-            openai_api_key=settings.openai_api_key,
-        )
+        
+        # Use provided LLM or create one based on configuration
+        if llm:
+            self.llm = llm
+        elif settings.use_bedrock_for_services or not settings.openai_api_key:
+            # Use Bedrock if configured or if OpenAI key is missing
+            logger.info("Using AWS Bedrock (Claude) for technical service")
+            # Configure credentials (bearer token or access keys)
+            import os
+            if settings.aws_bearer_token_bedrock:
+                os.environ["AWS_BEARER_TOKEN_BEDROCK"] = settings.aws_bearer_token_bedrock
+                logger.debug("Using AWS Bedrock bearer token for authentication")
+            elif settings.aws_access_key_id and settings.aws_secret_access_key:
+                os.environ["AWS_ACCESS_KEY_ID"] = settings.aws_access_key_id
+                os.environ["AWS_SECRET_ACCESS_KEY"] = settings.aws_secret_access_key
+                if settings.aws_session_token:
+                    os.environ["AWS_SESSION_TOKEN"] = settings.aws_session_token
+            
+            self.llm = ChatBedrock(
+                model_id=settings.bedrock_service_model_id,
+                region_name=settings.aws_region,
+                credentials_profile_name=None,
+            )
+        else:
+            # Default to OpenAI
+            self.llm = ChatOpenAI(
+                model=settings.openai_model,
+                temperature=0,
+                openai_api_key=settings.openai_api_key,
+            )
+        
         self.agent = agent
 
         if vector_store:

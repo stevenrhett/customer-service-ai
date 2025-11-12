@@ -2,6 +2,8 @@
 Main FastAPI application for the Customer Service AI system.
 Handles incoming chat requests and routes them through the multi-agent system.
 """
+from contextlib import asynccontextmanager
+
 from app.api.v1 import chat
 from app.config import get_settings
 from app.middleware.rate_limiter import (RateLimitExceeded, limiter,
@@ -21,13 +23,36 @@ settings = get_settings()
 configure_logging(settings.log_level)
 logger = get_logger(__name__)
 
-# Create FastAPI app
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Lifespan context manager for startup and shutdown events.
+    Replaces deprecated @app.on_event("startup") pattern.
+    """
+    # Startup
+    try:
+        orchestrator = get_orchestrator_chain()
+        chat.set_orchestrator(orchestrator)
+        logger.info("Orchestrator initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to initialize orchestrator: {e}", exc_info=True)
+        raise
+    
+    yield
+    
+    # Shutdown (if needed in the future)
+    logger.info("Application shutting down")
+
+
+# Create FastAPI app with lifespan handler
 app = FastAPI(
     title="Customer Service AI",
     description="Advanced multi-agent customer service system with specialized agents",
     version="1.0.0",
     docs_url="/docs",  # Swagger UI
     redoc_url="/redoc",  # ReDoc alternative
+    lifespan=lifespan,
 )
 
 # Configure CORS
@@ -98,19 +123,6 @@ async def general_exception_handler(request: Request, exc: Exception):
             "type": exc.__class__.__name__,
         },
     )
-
-
-# Initialize orchestrator and inject into API
-@app.on_event("startup")
-async def startup_event():
-    """Initialize services on application startup."""
-    try:
-        orchestrator = get_orchestrator_chain()
-        chat.set_orchestrator(orchestrator)
-        logger.info("Orchestrator initialized successfully")
-    except Exception as e:
-        logger.error(f"Failed to initialize orchestrator: {e}", exc_info=True)
-        raise
 
 
 # Include routers

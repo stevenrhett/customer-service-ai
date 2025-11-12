@@ -36,6 +36,17 @@ class RouterService:
     def _create_bedrock_client(self) -> ChatBedrock:
         """Create Bedrock client from settings."""
         try:
+            # Configure credentials (bearer token or access keys)
+            import os
+            if settings.aws_bearer_token_bedrock:
+                os.environ["AWS_BEARER_TOKEN_BEDROCK"] = settings.aws_bearer_token_bedrock
+                logger.debug("Using AWS Bedrock bearer token for authentication")
+            elif settings.aws_access_key_id and settings.aws_secret_access_key:
+                os.environ["AWS_ACCESS_KEY_ID"] = settings.aws_access_key_id
+                os.environ["AWS_SECRET_ACCESS_KEY"] = settings.aws_secret_access_key
+                if settings.aws_session_token:
+                    os.environ["AWS_SESSION_TOKEN"] = settings.aws_session_token
+            
             return ChatBedrock(
                 model_id=settings.bedrock_model_id,
                 region_name=settings.aws_region,
@@ -91,7 +102,28 @@ Respond with ONLY one word: billing, technical, or policy"""
             return intent
 
         except Exception as e:
+            error_str = str(e)
             logger.error(f"Error classifying intent: {e}", exc_info=True)
+            
+            # Check for expired token
+            if "ExpiredTokenException" in error_str or "expired" in error_str.lower():
+                raise LLMError(
+                    "AWS security token has expired. Please refresh your AWS credentials. "
+                    "If using SSO, get new credentials from AWS Console. "
+                    "Update your .env file with new AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_SESSION_TOKEN.",
+                    provider="bedrock",
+                    details={"error_type": "ExpiredTokenException", "original_error": error_str}
+                )
+            
+            # Check for access denied
+            if "AccessDeniedException" in error_str or "access denied" in error_str.lower():
+                raise LLMError(
+                    "AWS Bedrock access denied. Please check your AWS credentials and IAM permissions. "
+                    "Ensure your AWS account has Bedrock access enabled.",
+                    provider="bedrock",
+                    details={"error_type": "AccessDeniedException", "original_error": error_str}
+                )
+            
             raise LLMError(
                 f"Failed to classify query intent: {str(e)}", provider="bedrock"
             )

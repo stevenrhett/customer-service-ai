@@ -276,8 +276,11 @@ curl -X POST http://localhost:8000/api/chat/stream \
 
 ## 🧪 Testing
 
-### Backend
+See the [Testing Guide](docs/development/TESTING.md) for comprehensive testing instructions.
 
+### Quick Test Commands
+
+**Backend:**
 ```bash
 cd backend
 source venv/bin/activate
@@ -285,8 +288,7 @@ pytest
 pytest --cov=app --cov-report=html
 ```
 
-### Frontend
-
+**Frontend:**
 ```bash
 cd frontend
 npm test
@@ -347,6 +349,8 @@ customer-service-ai/
 
 ## 🔧 Troubleshooting
 
+See the [Troubleshooting Guide](docs/troubleshooting/TROUBLESHOOTING.md) for comprehensive error solutions.
+
 ### Common Issues
 
 **Backend won't start:**
@@ -367,6 +371,8 @@ customer-service-ai/
 ### Getting Help
 
 - 📖 [Deployment Guide](docs/DEPLOYMENT_GUIDE.md)
+- 🔧 [Troubleshooting Guide](docs/troubleshooting/TROUBLESHOOTING.md)
+- 🧪 [Testing Guide](docs/development/TESTING.md)
 - 🐛 [Project Review](PROJECT_REVIEW.md)
 - 💬 Open an issue on GitHub
 

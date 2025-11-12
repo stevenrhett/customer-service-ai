@@ -14,16 +14,21 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     # OpenAI Configuration
-    openai_api_key: str
+    openai_api_key: Optional[str] = None  # Optional - can use Bedrock instead
     openai_model: str = "gpt-4o"  # Default to gpt-4o (fallback to gpt-5 if available)
+    use_bedrock_for_services: bool = False  # Use Bedrock instead of OpenAI for services
 
     # AWS Bedrock Configuration
-    aws_access_key_id: str
-    aws_secret_access_key: str
+    aws_access_key_id: Optional[str] = None  # Optional if using bearer token
+    aws_secret_access_key: Optional[str] = None  # Optional if using bearer token
     aws_session_token: Optional[str] = None  # Required for temporary SSO credentials
+    aws_bearer_token_bedrock: Optional[str] = None  # Bearer token for Bedrock API key authentication
     aws_region: str = "us-west-2"
     bedrock_model_id: str = (
         "anthropic.claude-3-haiku-20240307-v1:0"  # Claude Haiku for routing
+    )
+    bedrock_service_model_id: str = (
+        "anthropic.claude-3-sonnet-20240229-v1:0"  # Claude Sonnet for services (better quality)
     )
 
     # Application Configuration
@@ -59,30 +64,28 @@ class Settings(BaseSettings):
 
     @field_validator("openai_api_key")
     @classmethod
-    def validate_openai_key(cls, v: str) -> str:
-        """Validate OpenAI API key format."""
-        if not v or not v.strip():
-            raise ValueError(
-                "OpenAI API key is required. Set OPENAI_API_KEY environment variable."
-            )
-        if not v.startswith("sk-"):
+    def validate_openai_key(cls, v: Optional[str]) -> Optional[str]:
+        """Validate OpenAI API key format if provided."""
+        if v is None:
+            return None  # OpenAI is optional if using Bedrock
+        v = v.strip()
+        if not v or not v.startswith("sk-"):
             raise ValueError(
                 "OpenAI API key appears to be invalid. "
                 "OpenAI keys typically start with 'sk-'. "
                 "Please check your OPENAI_API_KEY environment variable."
             )
-        return v.strip()
+        return v
 
     @field_validator("aws_access_key_id")
     @classmethod
-    def validate_aws_access_key(cls, v: str) -> str:
-        """Validate AWS access key ID format."""
-        if not v or not v.strip():
-            raise ValueError(
-                "AWS Access Key ID is required. "
-                "Set AWS_ACCESS_KEY_ID environment variable or configure AWS credentials."
-            )
+    def validate_aws_access_key(cls, v: Optional[str]) -> Optional[str]:
+        """Validate AWS access key ID format if provided."""
+        if v is None:
+            return None  # Optional if using bearer token
         v = v.strip()
+        if not v:
+            return None
         # AWS Access Key IDs are typically 20 characters, alphanumeric
         if len(v) < 16 or len(v) > 128:
             raise ValueError(
@@ -94,20 +97,36 @@ class Settings(BaseSettings):
 
     @field_validator("aws_secret_access_key")
     @classmethod
-    def validate_aws_secret_key(cls, v: str) -> str:
-        """Validate AWS secret access key format."""
-        if not v or not v.strip():
-            raise ValueError(
-                "AWS Secret Access Key is required. "
-                "Set AWS_SECRET_ACCESS_KEY environment variable or configure AWS credentials."
-            )
+    def validate_aws_secret_key(cls, v: Optional[str]) -> Optional[str]:
+        """Validate AWS secret access key format if provided."""
+        if v is None:
+            return None  # Optional if using bearer token
         v = v.strip()
+        if not v:
+            return None
         # AWS Secret Access Keys are typically 40 characters
         if len(v) < 20:
             raise ValueError(
                 "AWS Secret Access Key appears to be invalid. "
                 "Secret Access Keys are typically 40 characters long. "
                 "Please check your AWS_SECRET_ACCESS_KEY environment variable."
+            )
+        return v
+    
+    @field_validator("aws_bearer_token_bedrock")
+    @classmethod
+    def validate_bearer_token(cls, v: Optional[str]) -> Optional[str]:
+        """Validate AWS Bedrock bearer token format if provided."""
+        if v is None:
+            return None
+        v = v.strip()
+        if not v:
+            return None
+        # Basic validation - bearer tokens should have some length
+        if len(v) < 10:
+            raise ValueError(
+                "AWS Bedrock bearer token appears to be invalid. "
+                "Please check your AWS_BEARER_TOKEN_BEDROCK environment variable."
             )
         return v
 
@@ -178,6 +197,23 @@ class Settings(BaseSettings):
             for header in self.cors_allow_headers.split(",")
             if header.strip()
         ]
+
+    def model_post_init(self, __context) -> None:
+        """Validate that at least one AWS authentication method is provided."""
+        has_bearer_token = bool(self.aws_bearer_token_bedrock)
+        has_access_keys = bool(self.aws_access_key_id and self.aws_secret_access_key)
+        
+        if not has_bearer_token and not has_access_keys:
+            # Check if using default credential chain (no explicit credentials)
+            # This is OK if running on EC2, Lambda, or with AWS profile configured
+            import os
+            if not os.getenv("AWS_PROFILE") and not os.getenv("AWS_ROLE_ARN"):
+                raise ValueError(
+                    "AWS authentication required. Provide either:\n"
+                    "  - AWS_BEARER_TOKEN_BEDROCK (for Bedrock API key), OR\n"
+                    "  - AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY (for traditional credentials)\n"
+                    "  - Or configure AWS_PROFILE/AWS_ROLE_ARN for default credential chain"
+                )
 
     class Config:
         env_file = ".env"

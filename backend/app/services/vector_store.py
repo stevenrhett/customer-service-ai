@@ -5,7 +5,7 @@ from typing import Optional
 
 from app.config import get_settings
 from app.utils.logging import get_logger
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 
 settings = get_settings()

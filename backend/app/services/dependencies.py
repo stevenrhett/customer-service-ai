@@ -3,6 +3,7 @@ Dependency injection for services and clients.
 
 Provides factory functions to create and configure service instances.
 """
+import os
 from functools import lru_cache
 
 from app.agents.billing_agent import BillingAgent
@@ -23,6 +24,28 @@ logger = get_logger(__name__)
 settings = get_settings()
 
 
+def _configure_bedrock_credentials():
+    """
+    Configure Bedrock credentials based on settings.
+    Sets environment variables for bearer token if provided.
+    """
+    # If bearer token is provided, set it as environment variable
+    # Boto3/ChatBedrock will automatically use AWS_BEARER_TOKEN_BEDROCK if set
+    if settings.aws_bearer_token_bedrock:
+        os.environ["AWS_BEARER_TOKEN_BEDROCK"] = settings.aws_bearer_token_bedrock
+        logger.debug("Using AWS Bedrock bearer token for authentication")
+    elif settings.aws_access_key_id and settings.aws_secret_access_key:
+        # Use traditional AWS credentials
+        os.environ["AWS_ACCESS_KEY_ID"] = settings.aws_access_key_id
+        os.environ["AWS_SECRET_ACCESS_KEY"] = settings.aws_secret_access_key
+        if settings.aws_session_token:
+            os.environ["AWS_SESSION_TOKEN"] = settings.aws_session_token
+        logger.debug("Using AWS access key credentials for authentication")
+    else:
+        # Will use default credential chain (IAM role, profile, etc.)
+        logger.debug("Using default AWS credential chain")
+
+
 @lru_cache()
 def get_openai_client() -> ChatOpenAI:
     """
@@ -30,7 +53,15 @@ def get_openai_client() -> ChatOpenAI:
 
     Returns:
         ChatOpenAI client instance
+    
+    Raises:
+        ValueError: If OpenAI API key is not configured
     """
+    if not settings.openai_api_key:
+        raise ValueError(
+            "OpenAI API key is required. Set OPENAI_API_KEY environment variable "
+            "or enable USE_BEDROCK_FOR_SERVICES=true to use AWS Bedrock instead."
+        )
     return ChatOpenAI(
         model=settings.openai_model,
         temperature=0,
@@ -41,13 +72,30 @@ def get_openai_client() -> ChatOpenAI:
 @lru_cache()
 def get_bedrock_client() -> ChatBedrock:
     """
-    Get or create Bedrock client.
+    Get or create Bedrock client for routing.
 
     Returns:
         ChatBedrock client instance
     """
+    _configure_bedrock_credentials()
     return ChatBedrock(
         model_id=settings.bedrock_model_id,
+        region_name=settings.aws_region,
+        credentials_profile_name=None,
+    )
+
+
+@lru_cache()
+def get_bedrock_service_client() -> ChatBedrock:
+    """
+    Get or create Bedrock client for services (uses Sonnet for better quality).
+
+    Returns:
+        ChatBedrock client instance
+    """
+    _configure_bedrock_credentials()
+    return ChatBedrock(
+        model_id=settings.bedrock_service_model_id,
         region_name=settings.aws_region,
         credentials_profile_name=None,
     )
@@ -88,7 +136,13 @@ def get_technical_service() -> TechnicalService:
         TechnicalService instance
     """
     vector_store = load_chroma_store("technical")
-    llm = get_openai_client()
+    
+    # Use Bedrock if configured, otherwise try OpenAI
+    if settings.use_bedrock_for_services or not settings.openai_api_key:
+        llm = get_bedrock_service_client()
+    else:
+        llm = get_openai_client()
+    
     agent = TechnicalAgent()
     return TechnicalService(vector_store=vector_store, llm=llm, agent=agent)
 

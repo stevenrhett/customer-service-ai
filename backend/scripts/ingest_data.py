@@ -38,11 +38,7 @@ class RecursiveCharacterTextSplitter:
                 start = end - self.chunk_overlap
         return chunks
 
-try:
-    from langchain_huggingface import HuggingFaceEmbeddings
-except ImportError:
-    # Fallback for older versions
-    from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 
 # Add parent directory to path to import app modules
 sys.path.append(str(Path(__file__).parent.parent))

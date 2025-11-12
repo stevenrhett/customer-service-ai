@@ -157,6 +157,13 @@ ENV/
 env.bak/
 venv.bak/
 
+# Backup files
+*.bak
+*.backup.*
+*.old
+*~
+.env.backup.*
+
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -220,3 +227,4 @@ node_modules/
 .next/
 .env.local
 backend/load_env.sh
+.DS_Store
