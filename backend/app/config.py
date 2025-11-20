@@ -62,6 +62,23 @@ class Settings(BaseSettings):
         str
     ] = None  # Name of secret in Secrets Manager
 
+    # Authentication Configuration
+    require_authentication: bool = False  # Enable API authentication (set True for production)
+    api_keys: Optional[str] = None  # Comma-separated API keys (for X-API-Key header)
+    jwt_secret_key: Optional[str] = None  # Secret key for JWT token signing
+    jwt_algorithm: str = "HS256"  # JWT signing algorithm
+    jwt_access_token_expire_minutes: int = 30  # JWT token expiration in minutes
+
+    # Production Security
+    enforce_https: bool = False  # Enforce HTTPS in production
+    allowed_hosts: str = "*"  # Comma-separated list of allowed hosts
+    max_request_size: int = 10485760  # Max request size in bytes (10MB default)
+
+    # Data Security
+    enable_encryption_at_rest: bool = False  # Encrypt sensitive data
+    encryption_key: Optional[str] = None  # Encryption key for data at rest
+    mask_pii_in_logs: bool = True  # Mask PII in log outputs
+
     @field_validator("openai_api_key")
     @classmethod
     def validate_openai_key(cls, v: Optional[str]) -> Optional[str]:
