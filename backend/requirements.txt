@@ -1,40 +1,47 @@
 # Core Framework
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-pydantic>=2.8.0
-pydantic-settings>=2.1.0
+fastapi==0.115.5  # Updated from 0.104.1 for security patches
+uvicorn[standard]==0.32.1  # Updated from 0.24.0
+pydantic==2.10.3  # Pinned specific version for reproducibility
+pydantic-settings==2.6.1  # Pinned specific version
 
 # AI/LLM Framework
-langchain>=0.1.0,<1.0.0
-langchain-openai>=0.0.2,<1.0.0
-langchain-aws>=0.1.0,<1.0.0
-langchain-community>=0.0.10,<1.0.0
-langgraph>=0.0.20,<2.0.0
+langchain==0.3.13  # Pinned to latest stable
+langchain-openai==0.2.12  # Pinned to latest stable
+langchain-aws==0.2.9  # Pinned to latest stable
+langchain-community==0.3.13  # Pinned to latest stable
+langgraph==0.2.59  # Pinned to latest stable
 
 # Vector Database
-chromadb==0.4.18
+chromadb==0.5.23  # Updated from 0.4.18 for security and features
 
 # Embeddings
-sentence-transformers>=2.2.2,<3.0.0
-langchain-huggingface>=0.0.1
-huggingface-hub<0.20.0  # Pin to avoid compatibility issues with sentence-transformers
-tf-keras  # Required for Keras 3 compatibility with transformers
-numpy<2.0.0  # Required for compatibility with tensorflow/sentence-transformers
-# Note: protobuf version managed by tensorflow/tf-keras
-# tf-keras requires protobuf>=5.28.0, which may conflict with some packages
-# This is generally safe to ignore unless you encounter runtime errors
+sentence-transformers==3.3.1  # Updated to latest
+langchain-huggingface==0.1.2  # Pinned to latest
+huggingface-hub==0.26.5  # Updated with pinned version
+tokenizers==0.21.0  # Explicit pin for security
+numpy==1.26.4  # Pinned to avoid compatibility issues
 
 # AWS
-boto3>=1.34.72
-botocore>=1.34.72
+boto3==1.35.79  # Pinned specific version
+botocore==1.35.79  # Pinned to match boto3
 
 # OpenAI
-openai>=1.0.0
+openai==1.57.2  # Pinned specific version
 
 # Utilities
-python-dotenv==1.0.0
-python-multipart==0.0.6
+python-dotenv==1.0.1  # Updated to latest
+python-multipart==0.0.20  # Updated from 0.0.6
 
 # Security & Rate Limiting
 slowapi==0.1.9
-html-sanitizer==2.2.0
+html-sanitizer==2.4.4  # Updated from 2.2.0
+cryptography==44.0.0  # Added for encryption support
+
+# Redis for production-ready session/cache (optional but recommended)
+redis==5.2.1  # Added for production caching
+hiredis==3.0.0  # Redis performance optimization
+
+# Additional security dependencies
+python-jose[cryptography]==3.3.0  # JWT handling for authentication
+passlib[bcrypt]==1.7.4  # Password hashing
+bcrypt==4.2.1  # Explicit bcrypt version

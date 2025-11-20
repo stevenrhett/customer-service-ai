@@ -70,8 +70,8 @@ class CacheService:
         key_parts.extend(f"{k}={v}" for k, v in sorted_kwargs)
 
         key_string = "|".join(key_parts)
-        # Hash to keep keys manageable
-        return hashlib.md5(key_string.encode()).hexdigest()
+        # Hash to keep keys manageable (using SHA-256 for security)
+        return hashlib.sha256(key_string.encode()).hexdigest()
 
     def get(self, key: str) -> Optional[Any]:
         """

@@ -1,0 +1,103 @@
+# Dependabot configuration for automated dependency updates
+# Helps keep dependencies secure and up-to-date
+
+version: 2
+updates:
+  # Backend Python dependencies
+  - package-ecosystem: "pip"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "security-team"
+    labels:
+      - "dependencies"
+      - "backend"
+      - "security"
+    # Group updates by type
+    groups:
+      security-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "security"
+      langchain-updates:
+        patterns:
+          - "langchain*"
+      aws-updates:
+        patterns:
+          - "boto*"
+          - "langchain-aws"
+
+  # Frontend npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "security-team"
+    labels:
+      - "dependencies"
+      - "frontend"
+      - "security"
+    groups:
+      security-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "security"
+      react-updates:
+        patterns:
+          - "react*"
+          - "@types/react*"
+      next-updates:
+        patterns:
+          - "next"
+          - "eslint-config-next"
+
+  # Docker base images
+  - package-ecosystem: "docker"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    reviewers:
+      - "security-team"
+    labels:
+      - "dependencies"
+      - "docker"
+      - "security"
+
+  - package-ecosystem: "docker"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    reviewers:
+      - "security-team"
+    labels:
+      - "dependencies"
+      - "docker"
+      - "security"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    reviewers:
+      - "security-team"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "security"
