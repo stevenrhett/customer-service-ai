@@ -1,0 +1,212 @@
+{
+  "description": "CloudWatch monitoring configuration for Customer Service AI",
+  "logGroups": [
+    {
+      "name": "/customer-service-ai/production",
+      "retentionDays": 30,
+      "description": "Application logs"
+    },
+    {
+      "name": "/customer-service-ai/audit",
+      "retentionDays": 90,
+      "description": "Security audit logs"
+    }
+  ],
+  "metricFilters": [
+    {
+      "filterName": "ErrorCount",
+      "logGroupName": "/customer-service-ai/production",
+      "filterPattern": "[time, request_id, level=ERROR*, ...]",
+      "metricTransformations": [
+        {
+          "metricName": "ErrorCount",
+          "metricNamespace": "CustomerServiceAI",
+          "metricValue": "1",
+          "defaultValue": 0
+        }
+      ]
+    },
+    {
+      "filterName": "AuthenticationFailures",
+      "logGroupName": "/customer-service-ai/audit",
+      "filterPattern": "{$.event_type = \"auth.failure\"}",
+      "metricTransformations": [
+        {
+          "metricName": "AuthFailures",
+          "metricNamespace": "CustomerServiceAI/Security",
+          "metricValue": "1",
+          "defaultValue": 0
+        }
+      ]
+    },
+    {
+      "filterName": "RateLimitExceeded",
+      "logGroupName": "/customer-service-ai/production",
+      "filterPattern": "[time, request_id, level, msg=\"Rate limit exceeded\", ...]",
+      "metricTransformations": [
+        {
+          "metricName": "RateLimitHits",
+          "metricNamespace": "CustomerServiceAI/Security",
+          "metricValue": "1",
+          "defaultValue": 0
+        }
+      ]
+    },
+    {
+      "filterName": "SecurityViolations",
+      "logGroupName": "/customer-service-ai/audit",
+      "filterPattern": "{$.event_type = \"security.*\"}",
+      "metricTransformations": [
+        {
+          "metricName": "SecurityViolations",
+          "metricNamespace": "CustomerServiceAI/Security",
+          "metricValue": "1",
+          "defaultValue": 0
+        }
+      ]
+    }
+  ],
+  "alarms": [
+    {
+      "alarmName": "CustomerServiceAI-HighErrorRate",
+      "alarmDescription": "Alert when error rate exceeds threshold",
+      "metricName": "ErrorCount",
+      "namespace": "CustomerServiceAI",
+      "statistic": "Sum",
+      "period": 300,
+      "evaluationPeriods": 2,
+      "threshold": 10,
+      "comparisonOperator": "GreaterThanThreshold",
+      "treatMissingData": "notBreaching",
+      "actionsEnabled": true
+    },
+    {
+      "alarmName": "CustomerServiceAI-AuthenticationFailures",
+      "alarmDescription": "Alert on multiple authentication failures",
+      "metricName": "AuthFailures",
+      "namespace": "CustomerServiceAI/Security",
+      "statistic": "Sum",
+      "period": 300,
+      "evaluationPeriods": 1,
+      "threshold": 5,
+      "comparisonOperator": "GreaterThanThreshold",
+      "treatMissingData": "notBreaching",
+      "actionsEnabled": true
+    },
+    {
+      "alarmName": "CustomerServiceAI-SecurityViolations",
+      "alarmDescription": "Alert on any security violations",
+      "metricName": "SecurityViolations",
+      "namespace": "CustomerServiceAI/Security",
+      "statistic": "Sum",
+      "period": 60,
+      "evaluationPeriods": 1,
+      "threshold": 1,
+      "comparisonOperator": "GreaterThanOrEqualToThreshold",
+      "treatMissingData": "notBreaching",
+      "actionsEnabled": true
+    },
+    {
+      "alarmName": "CustomerServiceAI-HealthCheckFailed",
+      "alarmDescription": "Alert when health check fails",
+      "metricName": "HealthCheckFailed",
+      "namespace": "AWS/Route53",
+      "statistic": "Minimum",
+      "period": 60,
+      "evaluationPeriods": 2,
+      "threshold": 1,
+      "comparisonOperator": "LessThanThreshold",
+      "treatMissingData": "breaching",
+      "actionsEnabled": true
+    }
+  ],
+  "dashboards": [
+    {
+      "dashboardName": "CustomerServiceAI-Production",
+      "widgets": [
+        {
+          "type": "metric",
+          "properties": {
+            "title": "Error Rate",
+            "metrics": [
+              ["CustomerServiceAI", "ErrorCount", {"stat": "Sum"}]
+            ],
+            "period": 300,
+            "region": "us-west-2",
+            "yAxis": {
+              "left": {
+                "min": 0
+              }
+            }
+          }
+        },
+        {
+          "type": "metric",
+          "properties": {
+            "title": "Authentication Metrics",
+            "metrics": [
+              ["CustomerServiceAI/Security", "AuthFailures", {"label": "Failures"}],
+              [".", "AuthSuccess", {"label": "Success"}]
+            ],
+            "period": 300,
+            "region": "us-west-2",
+            "stat": "Sum"
+          }
+        },
+        {
+          "type": "metric",
+          "properties": {
+            "title": "API Response Time",
+            "metrics": [
+              ["AWS/ApplicationELB", "TargetResponseTime", {"stat": "Average"}]
+            ],
+            "period": 60,
+            "region": "us-west-2"
+          }
+        },
+        {
+          "type": "metric",
+          "properties": {
+            "title": "Security Events",
+            "metrics": [
+              ["CustomerServiceAI/Security", "SecurityViolations"],
+              [".", "RateLimitHits"]
+            ],
+            "period": 300,
+            "region": "us-west-2",
+            "stat": "Sum"
+          }
+        }
+      ]
+    }
+  ],
+  "setupInstructions": {
+    "cli": [
+      "# Create log groups",
+      "aws logs create-log-group --log-group-name /customer-service-ai/production",
+      "aws logs create-log-group --log-group-name /customer-service-ai/audit",
+      "aws logs put-retention-policy --log-group-name /customer-service-ai/production --retention-in-days 30",
+      "aws logs put-retention-policy --log-group-name /customer-service-ai/audit --retention-in-days 90",
+      "",
+      "# Create metric filters",
+      "aws logs put-metric-filter \\",
+      "  --log-group-name /customer-service-ai/production \\",
+      "  --filter-name ErrorCount \\",
+      "  --filter-pattern '[time, request_id, level=ERROR*, ...]' \\",
+      "  --metric-transformations metricName=ErrorCount,metricNamespace=CustomerServiceAI,metricValue=1,defaultValue=0",
+      "",
+      "# Create alarms (requires SNS topic for notifications)",
+      "aws cloudwatch put-metric-alarm \\",
+      "  --alarm-name CustomerServiceAI-HighErrorRate \\",
+      "  --alarm-description 'Alert when error rate exceeds threshold' \\",
+      "  --metric-name ErrorCount \\",
+      "  --namespace CustomerServiceAI \\",
+      "  --statistic Sum \\",
+      "  --period 300 \\",
+      "  --evaluation-periods 2 \\",
+      "  --threshold 10 \\",
+      "  --comparison-operator GreaterThanThreshold \\",
+      "  --alarm-actions arn:aws:sns:us-west-2:ACCOUNT_ID:customer-service-ai-alerts"
+    ]
+  }
+}
