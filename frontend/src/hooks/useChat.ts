@@ -109,12 +109,10 @@ export function useChat(): UseChatReturn {
     // Build request
     const request: ChatRequest = {
       message: text.trim(),
-      sessionId,
-      conversationHistory: messages.map((msg): ChatHistoryItem => ({
-        id: msg.id,
+      session_id: sessionId,
+      conversation_history: messages.map((msg): ChatHistoryItem => ({
         role: msg.role,
         content: msg.content,
-        createdAt: msg.createdAt,
       })),
     }
 
