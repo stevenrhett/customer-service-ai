@@ -228,3 +228,6 @@ node_modules/
 .env.local
 backend/load_env.sh
 .DS_Store
+
+# TypeScript
+*.tsbuildinfo

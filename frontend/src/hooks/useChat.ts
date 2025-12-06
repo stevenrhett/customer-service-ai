@@ -107,14 +107,14 @@ export function useChat(): UseChatReturn {
     setMessages(prev => [...prev, assistantMessage])
 
     // Build request
+    // Note: Only role and content are sent to the API for conversation history
+    // The id and createdAt fields are frontend-only for UI state management
     const request: ChatRequest = {
       message: text.trim(),
-      sessionId,
+      sessionId: sessionId,
       conversationHistory: messages.map((msg): ChatHistoryItem => ({
-        id: msg.id,
         role: msg.role,
         content: msg.content,
-        createdAt: msg.createdAt,
       })),
     }
 
