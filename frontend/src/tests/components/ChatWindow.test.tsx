@@ -6,12 +6,14 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ChatWindow } from '@/components/chat/ChatWindow'
 
+import { useChat } from '@/hooks/useChat'
+
 // Mock the useChat hook
 jest.mock('@/hooks/useChat', () => ({
   useChat: jest.fn(),
 }))
 
-const mockUseChat = require('@/hooks/useChat').useChat
+const mockUseChat = useChat as jest.MockedFunction<typeof useChat>
 
 describe('ChatWindow', () => {
   const mockSendMessage = jest.fn()
