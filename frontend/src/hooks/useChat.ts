@@ -111,8 +111,8 @@ export function useChat(): UseChatReturn {
     // The id and createdAt fields are frontend-only for UI state management
     const request: ChatRequest = {
       message: text.trim(),
-      session_id: sessionId,
-      conversation_history: messages.map((msg): ChatHistoryItem => ({
+      sessionId: sessionId,
+      conversationHistory: messages.map((msg): ChatHistoryItem => ({
         role: msg.role,
         content: msg.content,
       })),
