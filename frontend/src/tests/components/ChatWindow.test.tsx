@@ -13,7 +13,8 @@ jest.mock('@/hooks/useChat', () => ({
   useChat: jest.fn(),
 }))
 
-const mockUseChat = useChat as jest.MockedFunction<typeof useChat>
+// Type-safe mock reference
+const mockUseChat = jest.mocked(useChat)
 
 describe('ChatWindow', () => {
   const mockSendMessage = jest.fn()
