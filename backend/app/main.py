@@ -272,7 +272,8 @@ async def health_check():
         if not os.path.exists(chroma_dir):
             vector_db_status = "warning: directory not found"
     except Exception as e:
-        vector_db_status = f"error: {str(e)}"
+        get_logger().exception("Vector DB directory health check failed")
+        vector_db_status = "error"
 
     # Check cache
     cache_stats = cache_service.get_stats()
