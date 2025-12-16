@@ -164,5 +164,5 @@ async def _generate_stream(
         yield f"data: {json.dumps(error_data)}\n\n"
     except Exception as e:
         logger.error(f"Error in streaming: {str(e)}", exc_info=True)
-        error_data = {"error": str(e)}
+        error_data = {"error": "An internal error occurred."}
         yield f"data: {json.dumps(error_data)}\n\n"
